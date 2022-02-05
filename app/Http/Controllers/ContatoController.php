@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Contact;
-use App\Models\User;
 
 class ContatoController extends Controller
 {
@@ -62,16 +61,19 @@ class ContatoController extends Controller
 
         $user = auth()->user($id);
 
-        $search = request('search');
-        if ($search) {
+        $search_name = request('search_name');
+        $search_email = request('search_email');
+
+        if ($search_name || $search_email) {
             $contacts = Contact::where([
-                ['name', 'like', '%'.$search.'%'],
+                ['name', 'like', '%'.$search_name.'%'],
+                ['email', 'like', '%'.$search_email.'%'],
                 ['user_id','like', $user->id],
-            ])->get();
+            ])->get();//paginate https://www.youtube.com/watch?v=RiOJzEGD1Vk
         } else {
             $contacts = $user->contacts;
         }
-        return view('contacts.dashboard', ['contacts' => $contacts,'search' => $search]);
+        return view('contacts.dashboard', ['contacts' => $contacts,'search_name' => $search_name]);
 
     }
 
@@ -85,7 +87,39 @@ class ContatoController extends Controller
         return redirect('/contacts/dashboard/list')->with('msg', 'Contato excluido com sucesso!');
     }
 
+    public function edit($id) {
+        $contact = Contact::findOrFail($id);
+        return view('contacts.edit', ['contact' => $contact]);
+    }
 
+
+    public function update(Request $request) {
+        $contact = Contact::findOrFail($request->id);
+        //var_dump($contact->image);
+
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            if($contact->image) {
+                $image = public_path().'/img/contacts/'.$contact->image;
+                unlink($image);
+            }
+
+            $requestImage = $request->image;
+            $extension = $requestImage->extension();
+            $imageName = md5($requestImage->getClientOriginalName() . strtotime('now')) . "." . $extension;
+            $requestImage->move(public_path('img/contacts'), $imageName);
+            $request->image = $imageName;
+
+
+        } else {
+            $request->image = $contact->image;
+        }
+        //    var_dump($request->image);
+          //  exit();
+        Contact::findOrFail($request->id)->update($request->all());
+        Contact::findOrFail($request->id)->update(['image'=>$request->image]);
+
+        return redirect('/contacts/dashboard/list')->with('msg', 'Contato editado com sucesso!');
+    }
     /*$contact = Contact::findOrFail($id);
         $contactOwner = User::where('id',$contact->user_id)->first()->toArray();
         return view('contacts.dashboard', ['contact' =>$contact,'contactOwner' =>$contactOwner]); */

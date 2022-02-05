@@ -15,9 +15,10 @@
                 </a>
             </li>
             <li class="search-default">
-                <h1>Busca por contato</h1>
+                <h1>Filtro de contato</h1>
                 <form action="">
-                    <input type="text" id="search" name="search" class="" placeholder="Procurar...">
+                    <input type="text" id="search_name" name="search_name" class="" placeholder="Nome">
+                    <input type="text" id="search_email" name="search_email" class="" placeholder="Email">
                     <input class="btn-input" type="submit" value="Pesquisar">
                 </form>
             </li>

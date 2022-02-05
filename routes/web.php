@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContatoController;
+use App\Http\Controllers\SendEmailController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,12 +20,20 @@ Route::get('/contacts/create', [ContatoController::class, 'create'])->middleware
 Route::get('/contacts/{id}', [ContatoController::class, 'show'])->middleware('auth');
 Route::post('/contacts', [ContatoController::class, 'store'])->middleware('auth');
 Route::delete('/contacts/{id}', [ContatoController::class, 'destroy'])->middleware('auth');
+Route::get('/contacts/edit/{id}',[ContatoController::class, 'edit'])->middleware('auth');
+Route::put('/contacts/update/{id}',[ContatoController::class, 'update'])->middleware('auth');
+
+Route::post('/sendmail/send', [SendEmailController::class, 'send'])->middleware('auth');
+
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
 
+Route::fallback(function () {
+    return view('404');
+});
 /*
 
 */

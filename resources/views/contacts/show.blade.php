@@ -22,11 +22,15 @@
             <p><span>Email:</span>{{ $contact->email }}</p>
         </div>
         <div class="info-contato-opcoes">
-            <div class="grid-item"><a href="#"><ion-icon name="create-outline"></ion-icon>Editar</a></div>
+            <div class="grid-item"><a href="/contacts/edit/{{ $contact->id }}">
+                    <ion-icon name="create-outline"></ion-icon>Editar
+                </a></div>
             <form action="/contacts/{{ $contact->id }}" method="POST">
                 @csrf
                 @method('DELETE')
-                <button type="submit" onclick="return confirm('Tem Certeza Da Exclusão?')"><ion-icon name="trash-outline" ></ion-icon>Excluir</button>
+                <button type="submit" onclick="return confirm('Tem Certeza Da Exclusão?')">
+                    <ion-icon name="trash-outline"></ion-icon>Excluir
+                </button>
             </form>
         </div>
 
@@ -47,7 +51,6 @@
     <div class="form-cadastro">
         <form method="post" action="{{ url('sendmail/send') }}">
             @csrf
-
             <div class="area-input">
                 <label for="remetente">De:</label>
                 <input type="text" placeholder="remetente" name="remetente" value="{{ $user->name }}">

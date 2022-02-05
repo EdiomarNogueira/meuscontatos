@@ -26,11 +26,15 @@
                 <label for="email">Email:</label>
                 <input type="text" name="email" id="">
             </div>
-            <div class="area-input">
-                <label for="image">Foto do Contato:</label>
-                <input type="file" name="image" id="image">
+            <div class="flex">
+                <div class="area-input">
+                    <label for="image">Foto do Contato:</label>
+                    <input type="file" name="image" id="image">
+                </div>
+                <div class="area-input">
+                    <input class="btn-input" type="submit" value="Enviar">
+                </div>
             </div>
-            <input class="btn-input" type="submit" value="Enviar">
         </form>
     </div>
 </div>
