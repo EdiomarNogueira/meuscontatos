@@ -39,6 +39,9 @@
             @endforeach
         </div>
     </div>
+    <div class="centraliza area-pagination">
+        {{ $contacts->links('shared.pagination') }}
+    </div>
     <!---->
     @else
     <div class="area-error">

@@ -9,38 +9,52 @@
     {{ session('status') }}
 </div>
 @endif
-<div class="form-login">
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
-
-        <div class="area-input">
-            <x-jet-label for="email" value="{{ __('Email') }}" />
-            <x-jet-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+<div class="flex-column">
+    <div>
+        @if ($errors->any())
+        <div>
+            <ul class="area-notification">
+                @foreach($errors->all() as $error)
+                <li class="notification">{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
+        @endif
+    </div>
 
-        <div class="area-input">
-            <x-jet-label for="password" value="{{ __('Password') }}" />
-            <x-jet-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
-        </div>
+    <div class="form-login">
 
-        <div class="area-input">
-            <label for="remember_me" class="remember-input">
-                <input type="checkbox" id="remember_me" name="remember" />
-                <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
+            <div class="area-input">
+                <x-jet-label for="email" value="{{ __('Email') }}" />
+                <x-jet-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+            </div>
 
-        <div class="area-input">
-            @if (Route::has('password.request'))
-            <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
-                {{ __('Forgot your password?') }}
-            </a>
-            @endif
+            <div class="area-input">
+                <x-jet-label for="password" value="{{ __('Password') }}" />
+                <x-jet-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
+            </div>
 
-            <x-jet-button class="btn-input">
-                {{ __('Log in') }}
-            </x-jet-button>
-        </div>
-    </form>
+            <div class="area-input">
+                <label for="remember_me" class="remember-input">
+                    <input type="checkbox" id="remember_me" name="remember" />
+                    <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+                </label>
+            </div>
+
+            <div class="area-input">
+                @if (Route::has('password.request'))
+                <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
+                    {{ __('Forgot your password?') }}
+                </a>
+                @endif
+
+                <x-jet-button class="btn-input">
+                    {{ __('Log in') }}
+                </x-jet-button>
+            </div>
+        </form>
+    </div>
 </div>
 @endsection

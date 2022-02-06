@@ -23,7 +23,7 @@
         </div>
         <div class="info-contato-opcoes">
             <div class="grid-item"><a href="/contacts/edit/{{ $contact->id }}">
-                    <ion-icon name="create-outline"></ion-icon>Editar
+                    <ion-icon name="create-outline" ></ion-icon>Editar
                 </a></div>
             <form action="/contacts/{{ $contact->id }}" method="POST">
                 @csrf

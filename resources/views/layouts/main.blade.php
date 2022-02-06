@@ -22,6 +22,11 @@
         <nav>
             <a href="/" class="navbar-brand">
                 <img src="/img/logo.svg" alt="Meus Contatos">
+                @auth
+                    <?php $user = auth()->user(); ?>
+                    <h2>{{ $user->name }}</h2>
+                @endauth
+
             </a>
             <ul class="header-menu">
                 @auth

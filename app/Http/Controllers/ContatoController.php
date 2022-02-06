@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Contact;
+use App\Models\User;
+use PhpParser\Node\Expr\AssignOp\Concat;
 
 class ContatoController extends Controller
 {
@@ -47,15 +49,6 @@ class ContatoController extends Controller
         return redirect('/')->with('msg', 'Contato criado com sucesso!');
     }
 
-    public function show($id)
-    {
-        $user = auth()->user($id);
-
-        $contact = Contact::findOrFail($id);
-
-        return view('contacts.show', ['contact' => $contact, 'user' => $user]);
-    }
-
     public function dashboard($id)
     {
 
@@ -64,17 +57,35 @@ class ContatoController extends Controller
         $search_name = request('search_name');
         $search_email = request('search_email');
 
+
         if ($search_name || $search_email) {
             $contacts = Contact::where([
                 ['name', 'like', '%'.$search_name.'%'],
                 ['email', 'like', '%'.$search_email.'%'],
                 ['user_id','like', $user->id],
-            ])->get();//paginate https://www.youtube.com/watch?v=RiOJzEGD1Vk
+            ])->paginate(4)->withQueryString();//paginate https://www.youtube.com/watch?v=RiOJzEGD1Vk
         } else {
-            $contacts = $user->contacts;
+            $contacts = Contact::where([
+                ['user_id','like', $user->id],
+            ])->paginate(4);
+            //paginate https://www.youtube.com/watch?v=RiOJzEGD1Vk
+            //$contacts = Contact->user::where()
+            //$contacts_user = $user->contacts;
+            //$contacts = $user->contacts;
+           //$contacts = Contact::orderBy('name')->paginate(2);
         }
         return view('contacts.dashboard', ['contacts' => $contacts,'search_name' => $search_name]);
 
+    }
+
+    //Mostrar um contato em especifico
+    public function show($id)
+    {
+        $user = auth()->user($id);
+
+        $contact = Contact::findOrFail($id);
+
+        return view('contacts.show', ['contact' => $contact, 'user' => $user]);
     }
 
     public function destroy($id) {
